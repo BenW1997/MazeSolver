@@ -1,3 +1,3 @@
 # MazeSolver
 
-Maze solver based on left hand rule.
+Maze solver robot based on left hand rule.

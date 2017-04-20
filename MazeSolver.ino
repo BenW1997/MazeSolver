@@ -66,6 +66,16 @@ void loop()
 
 void sensor()
 {
+  //LEFT
+  digitalWrite(8, LOW);
+  digitalWrite(7, HIGH);
+  digitalWrite(9, 1 );//50
+
+  //RIGHT
+  digitalWrite(12, LOW);
+  digitalWrite(13, HIGH);
+  digitalWrite(11, 1);//0
+  
   if (durationFront > 650) //IF NO WALL IN FRONT
   {
     if (durationLeft < 300) //TURN SLIGHT RIGHT IF TOO CLOSE
@@ -73,65 +83,66 @@ void sensor()
       //LEFT
       digitalWrite(8, LOW);
       digitalWrite(7, HIGH);
-      digitalWrite(9, 50 );
+      digitalWrite(9, 1 );//50
 
       //RIGHT
       digitalWrite(12, LOW);
       digitalWrite(13, HIGH);
-      digitalWrite(11, 0);
+      digitalWrite(11, 0);//0
     }
     else if (durationLeft < 650) //GO STRAIGHT
     {
       //LEFT
       digitalWrite(8, LOW);
       digitalWrite(7, HIGH);
-      digitalWrite(9, 200 );
+      digitalWrite(9, 1);
+      delay(2000);
 
       //RIGHT
       digitalWrite(12, LOW);
       digitalWrite(13, HIGH);
-      digitalWrite(11, 60);
+      digitalWrite(11, 1);//60
     }
     else //if (durationLeft < 750) //TURN SLIGHT LEFT IF TOO FAR
     {
       //LEFT Wheel
       digitalWrite(8, LOW);
       digitalWrite(7, LOW);
-      digitalWrite(9, 90);
+      digitalWrite(9, 1);//90
 
       //RIGHT Wheel
       digitalWrite(12, LOW);
       digitalWrite(13, HIGH);
-      digitalWrite(11, 60);
+      digitalWrite(11, 1);//60
 
     }
   }
-  else //IS WALL
+  else //IS FRONT WALL
   {
     if (durationLeft > 750) //IF NO LEFT WALL
     {
       //LEFT Wheel
       digitalWrite(8, LOW);
       digitalWrite(7, LOW);
-      digitalWrite(9, 90);
+      digitalWrite(9, 1);//90
 
       //RIGHT Wheel
       digitalWrite(12, LOW);
       digitalWrite(13, HIGH);
-      digitalWrite(11, 60);
+      digitalWrite(11, 1);//60
     }
     else
     {
       //TURN RIGHT
       //LEFT Wheel
       digitalWrite(8, LOW);
-      digitalWrite(7, LOW);
-      digitalWrite(9, 90);
+      digitalWrite(7, HIGH);
+      digitalWrite(9, 1);//90
 
       //RIGHT Wheel
       digitalWrite(12, LOW);
-      digitalWrite(13, HIGH);
-      digitalWrite(11, 0);
+      digitalWrite(13, LOW);
+      digitalWrite(11, 0);//0
     }
   }
 }

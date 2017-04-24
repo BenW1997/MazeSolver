@@ -56,12 +56,6 @@ void loop()
   durationFront = pulseIn(echoPinFront, HIGH);
 
   sensor();
-  Serial.print("Left: ");
-  Serial.println(durationLeft);
-  Serial.print("Front: ");
-  Serial.println(durationFront);
-
-  delay(500);
 }
 
 void sensor()
@@ -76,73 +70,41 @@ void sensor()
   digitalWrite(13, HIGH);
   digitalWrite(11, 1);//0
   
-  if (durationFront > 650) //IF NO WALL IN FRONT
+  if (durationFront > 200) //IF NO WALL IN FRONT
   {
-    if (durationLeft < 300) //TURN SLIGHT RIGHT IF TOO CLOSE
+    if (durationLeft < 350) //TURN SLIGHT RIGHT IF TOO CLOSE
     {
-      //LEFT
-      digitalWrite(8, LOW);
-      digitalWrite(7, HIGH);
-      digitalWrite(9, 1 );//50
-
-      //RIGHT
-      digitalWrite(12, LOW);
-      digitalWrite(13, HIGH);
-      digitalWrite(11, 0);//0
+      analogWrite(9, 255);  //9 is left
+      analogWrite(11, 75); //11 is right
     }
-    else if (durationLeft < 650) //GO STRAIGHT
+    else if (durationLeft < 625) //GO STRAIGHT
     {
-      //LEFT
-      digitalWrite(8, LOW);
-      digitalWrite(7, HIGH);
-      digitalWrite(9, 1);
-      delay(2000);
-
-      //RIGHT
-      digitalWrite(12, LOW);
-      digitalWrite(13, HIGH);
-      digitalWrite(11, 1);//60
+      analogWrite(9, 255);
+      analogWrite(11, 255);
     }
-    else //if (durationLeft < 750) //TURN SLIGHT LEFT IF TOO FAR
+    else
     {
-      //LEFT Wheel
-      digitalWrite(8, LOW);
-      digitalWrite(7, LOW);
-      digitalWrite(9, 1);//90
-
-      //RIGHT Wheel
-      digitalWrite(12, LOW);
-      digitalWrite(13, HIGH);
-      digitalWrite(11, 1);//60
+      analogWrite(9, 75);
+      analogWrite(11, 255);
 
     }
   }
   else //IS FRONT WALL
   {
-    if (durationLeft > 750) //IF NO LEFT WALL
+    if (durationLeft > 625) //IF NO LEFT WALL
     {
-      //LEFT Wheel
-      digitalWrite(8, LOW);
-      digitalWrite(7, LOW);
-      digitalWrite(9, 1);//90
-
-      //RIGHT Wheel
-      digitalWrite(12, LOW);
-      digitalWrite(13, HIGH);
-      digitalWrite(11, 1);//60
+      analogWrite(9, 75);
+      analogWrite(11, 255);
     }
     else
     {
-      //TURN RIGHT
-      //LEFT Wheel
-      digitalWrite(8, LOW);
-      digitalWrite(7, HIGH);
-      digitalWrite(9, 1);//90
-
-      //RIGHT Wheel
-      digitalWrite(12, LOW);
+      //RIGHT
+      digitalWrite(12, HIGH);
       digitalWrite(13, LOW);
-      digitalWrite(11, 0);//0
+      analogWrite(9, 255);//90
+      analogWrite(11, 255);//0
+
+      delay(1800);
     }
   }
 }

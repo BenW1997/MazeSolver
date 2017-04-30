@@ -13,6 +13,8 @@ const int echoPinFront = 4;
 long durationLeft;
 long durationFront;
 
+char data = 0;
+
 void setup()
 {
 
@@ -55,7 +57,30 @@ void loop()
 
   durationFront = pulseIn(echoPinFront, HIGH);
 
-  sensor();
+  if(Serial.available() > 0)
+  {
+    data = Serial.read();
+    Serial.print(data);
+  }
+  else
+  {
+    if(data == '2') //right-hand rule
+    {
+      sensor2();
+    }
+    else if (data == '1') //left-hand rule
+    {
+      sensor();
+    }
+    else if (data == '0') //stop
+    {
+      pause();
+    }
+    else
+    {
+      pause();
+    }
+  }
 }
 
 void sensor()
@@ -107,5 +132,16 @@ void sensor()
       delay(1800);
     }
   }
+}
+
+void sensor2()
+{
+  
+}
+
+void pause()
+{
+  digitalWrite(9, 0 );
+  digitalWrite(11, 0 );
 }
 

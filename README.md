@@ -1,3 +1,3 @@
 # MazeSolver
 
-Maze solver robot based on left hand rule.
+Maze solving robot using bluetooth to switch between either the left hand rule or right hand rule.

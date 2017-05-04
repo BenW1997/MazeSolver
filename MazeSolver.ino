@@ -66,15 +66,17 @@ void loop()
 
 void sensor()
 {
+  /*
   //LEFT
   digitalWrite(8, LOW);
   digitalWrite(7, HIGH);
-  digitalWrite(9, 1 );//50
+  analogWrite(9, 1 );//50
 
   //RIGHT
   digitalWrite(12, LOW);
   digitalWrite(13, HIGH);
-  digitalWrite(11, 1);//0
+  analogWrite(11, 1);//0
+  */
   
   if (durationFront > 650) //IF NO WALL IN FRONT
   {
@@ -83,37 +85,37 @@ void sensor()
       //LEFT
       digitalWrite(8, LOW);
       digitalWrite(7, HIGH);
-      digitalWrite(9, 1 );//50
+      analogWrite(9, 233);//50
 
       //RIGHT
       digitalWrite(12, LOW);
       digitalWrite(13, HIGH);
-      digitalWrite(11, 0);//0
+      analogWrite(11, 150);//0
     }
     else if (durationLeft < 650) //GO STRAIGHT
     {
       //LEFT
       digitalWrite(8, LOW);
       digitalWrite(7, HIGH);
-      digitalWrite(9, 1);
-      delay(2000);
+      analogWrite(9, 233);
+      
 
       //RIGHT
       digitalWrite(12, LOW);
       digitalWrite(13, HIGH);
-      digitalWrite(11, 1);//60
+      analogWrite(11, 200);//60
     }
     else //if (durationLeft < 750) //TURN SLIGHT LEFT IF TOO FAR
     {
       //LEFT Wheel
       digitalWrite(8, LOW);
-      digitalWrite(7, LOW);
-      digitalWrite(9, 1);//90
+      digitalWrite(7, HIGH);
+      analogWrite(9, 175);//90
 
       //RIGHT Wheel
       digitalWrite(12, LOW);
       digitalWrite(13, HIGH);
-      digitalWrite(11, 1);//60
+      analogWrite(11, 200);//60
 
     }
   }
@@ -124,12 +126,12 @@ void sensor()
       //LEFT Wheel
       digitalWrite(8, LOW);
       digitalWrite(7, LOW);
-      digitalWrite(9, 1);//90
+      analogWrite(9, 1);//90
 
       //RIGHT Wheel
       digitalWrite(12, LOW);
       digitalWrite(13, HIGH);
-      digitalWrite(11, 1);//60
+      analogWrite(11, 1);//60
     }
     else
     {
@@ -137,12 +139,12 @@ void sensor()
       //LEFT Wheel
       digitalWrite(8, LOW);
       digitalWrite(7, HIGH);
-      digitalWrite(9, 1);//90
+      analogWrite(9, 1);//90
 
       //RIGHT Wheel
       digitalWrite(12, LOW);
       digitalWrite(13, LOW);
-      digitalWrite(11, 0);//0
+      analogWrite(11, 0);//0
     }
   }
 }

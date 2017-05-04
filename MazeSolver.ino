@@ -4,7 +4,7 @@
               Ben Wong
 */
 
-const int trigPinLeft = 3;
+const int trigPinLeft = 3; //PIN ASSIGNMENTS
 const int echoPinLeft = 2;
 
 const int trigPinFront = 5;
@@ -13,17 +13,17 @@ const int echoPinFront = 4;
 const int trigPinRight = 6;
 const int echoPinRight = 10;
 
-long durationLeft;
+long durationLeft; //DISTANCE DURATION FOR ULTRASONIC SENSORS
 long durationFront;
 long durationRight;
 
-int STATE = 0;
+int STATE = 0; //STATE MACHINE VARIABLES
 int NS = 0;
 
-int STATE2 = 0;
+int STATE2 = 0; //STATE MACHINE VARIABLES
 int NS2 = 0;
 
-const int idle = 0;
+const int idle = 0; //AVAILABLE STATES
 const int left = 1;
 const int straight = 2;
 const int right = 3;
@@ -36,20 +36,20 @@ void setup() {
   Serial.begin(9600);
 
   //LEFT
-  pinMode(7, OUTPUT);
+  pinMode(7, OUTPUT); //ASSIGNING LEFT MOTOR PINS TO OUTPUT
   pinMode(8, OUTPUT);
   pinMode(9, OUTPUT);
 
   //RIGHT
-  pinMode(13, OUTPUT);
+  pinMode(13, OUTPUT); //ASSIGNING RIGHT MOTOR PINS TO OUTPUT
   pinMode(12, OUTPUT);
   pinMode(11, OUTPUT);
 
-  pinMode(echoPinLeft, INPUT);
+  pinMode(echoPinLeft, INPUT); //ECHO PINS FROM ULTRASONIC TO INPUT
   pinMode(echoPinFront, INPUT);
   pinMode(echoPinRight, INPUT);
 
-  pinMode(trigPinLeft, OUTPUT);
+  pinMode(trigPinLeft, OUTPUT); //TRIGGER PINS FROM ULRTASONIC TO OUTPUT
   pinMode(trigPinFront, OUTPUT);
   pinMode(trigPinRight, OUTPUT);
 }
@@ -61,7 +61,7 @@ void loop() {
   delayMicroseconds(10);
   digitalWrite(trigPinLeft, LOW);
 
-  durationLeft = pulseIn(echoPinLeft, HIGH);
+  durationLeft = pulseIn(echoPinLeft, HIGH); //OBTAINING DURATION OF ULTRASONIC
 
   digitalWrite(trigPinFront, LOW);
   delayMicroseconds(2);
@@ -69,7 +69,7 @@ void loop() {
   delayMicroseconds(10);
   digitalWrite(trigPinFront, LOW);
 
-  durationFront = pulseIn(echoPinFront, HIGH);
+  durationFront = pulseIn(echoPinFront, HIGH); //OBTAINING DURATION OF ULTRASONIC
 
   digitalWrite(trigPinRight, LOW);
   delayMicroseconds(2);
@@ -77,19 +77,19 @@ void loop() {
   delayMicroseconds(10);
   digitalWrite(trigPinRight, LOW);
 
-  durationRight = pulseIn(echoPinRight, HIGH);
+  durationRight = pulseIn(echoPinRight, HIGH); //OBTAINING DURATION OF ULTRASONIC
 
   //left motor
-  digitalWrite(8, LOW);
+  digitalWrite(8, LOW); //LEFT MOTOR CLOCKWISE
   digitalWrite(7, HIGH);
   //right motor
-  digitalWrite(12, LOW);
+  digitalWrite(12, LOW); //RIGHT MOTOR CLOCKWISE
   digitalWrite(13, HIGH);
 
   bluetoothInput();
 }
 
-void bluetoothInput() {
+void bluetoothInput() { //BLUETOOTH INPUT FOR LEFT HAND RULE, RIGHT HAND RULE, AND STOPPING
   if (Serial.available())
   {
     data = Serial.read();
@@ -109,10 +109,10 @@ void bluetoothInput() {
 
 }
 
-void leftRule() {
-  STATE = NS;
+void leftRule() { //STATE MACHINE FOR LEFT HAND RULE
+  STATE = NS; //CURRENT STATE = NEXT STATE
 
-  switch (STATE) {
+  switch (STATE) { //SWITCH FOR CHANGING STATES
     case idle:
       if (durationLeft < 350 && durationFront >= 200)
         NS = slightRight;
@@ -146,7 +146,7 @@ void leftRule() {
 
   STATE = NS;
 
-  switch (STATE) {
+  switch (STATE) { //SWITCH FOR FUNCTIONS OF STATES
 
     case idle:
       break;
@@ -170,10 +170,10 @@ void leftRule() {
   }
 }
 
-void rightRule() {
+void rightRule() { //STATE MACHINE FOR RIGHT HAND RULE
   STATE2 = NS2;
 
-  switch (STATE2) {
+  switch (STATE2) { //SWITCH FOR CHANGING STATES
     case idle:
       if (durationRight < 350 && durationFront >= 200)
         NS2 = slightLeft;
@@ -207,7 +207,7 @@ void rightRule() {
 
   STATE2 = NS2;
 
-  switch (STATE2) {
+  switch (STATE2) { //SWITCH FOR FUNCTIONS OF STATES
 
     case idle:
       break;
@@ -231,22 +231,22 @@ void rightRule() {
   }
 }
 
-void pause() {
+void pause() { //STOP BOTH MOTORS
   digitalWrite(9, 0 );
   digitalWrite(11, 0 );
 }
 
-void turnSlightLeft() {
+void turnSlightLeft() { //LEFT MOTOR SLOWED DOWN
   analogWrite(9, 60);
   analogWrite(11, 255);
 }
 
-void goStraight() {
+void goStraight() { //BOTH MOTORS ON
   analogWrite(9, 255);
   analogWrite(11, 255);
 }
 
-void turnSharpRight() {
+void turnSharpRight() { //RIGHT TURN IN PLACE
   //RIGHT
   digitalWrite(12, HIGH);
   digitalWrite(13, LOW);
@@ -256,12 +256,12 @@ void turnSharpRight() {
   delay(1100);
 }
 
-void turnSlightRight() {
+void turnSlightRight() { //RIGHT MOTOR SLOWED DOWN
   analogWrite(9, 255);  //9 is left
   analogWrite(11, 55); //11 is right
 }
 
-void turnSharpLeft() {
+void turnSharpLeft() { //LEFT TURN IN PLACE
   //RIGHT
   digitalWrite(8, HIGH);
   digitalWrite(7, LOW);

@@ -101,8 +101,8 @@ void sensor()
 >>>>>>> origin/master
   {
     data = Serial.read();
-    Serial.print(data);
-    Serial.print("Serial available");
+ //   Serial.print(data);
+ //   Serial.print("Serial available");
   }
   /*  if (data == '2') //right-hand rule
     {
@@ -144,22 +144,22 @@ void sensor()
 =======
       sensor2();
     } */
- // Serial.println("in first else");
-  else if (data == '0') //left-hand rule
+  // Serial.println("in first else");
+  else if (data == '1') //left-hand rule
+  {
+    sensor();
+ //   Serial.println("sensor");
+  }
+  else if (data == '0') //stop
   {
     pause();
-    Serial.println("pause");
+ //   Serial.println("pause");
   }
-  else if (data == '1') //stop
-  {
-    sensor();
-    Serial.println("sensor");
-  }
-  else
-  {
-    sensor();
-    Serial.println("else pause");
-  }
+  //else
+  //{
+    //pause();
+ //   Serial.println("else pause");
+  //}
 
 }
 
@@ -170,9 +170,9 @@ void sensor()
   switch (STATE)
   {
     case idle:
-      if (durationLeft < 350 && durationFront > 200)
+      if (durationLeft < 350 && durationFront >= 200)
         NS = slightRight;
-      else if (durationLeft < 625 && durationFront > 200)
+      else if (durationLeft < 625 && durationFront >= 200)
         NS = goStraight;
       else if (durationLeft < 625 && durationFront < 200)
         NS = turnRight;
@@ -261,12 +261,12 @@ void sensor()
 >>>>>>> origin/master
   }
 }
-
+/*
 void sensor2()
 {
 
 }
-
+*/
 void pause()
 {
   digitalWrite(9, 0 );

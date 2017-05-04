@@ -10,17 +10,25 @@ const int echoPinLeft = 2;
 const int trigPinFront = 5;
 const int echoPinFront = 4;
 
+const int trigPinRight = 6;
+const int echoPinRight = 10;
+
 long durationLeft;
 long durationFront;
+long durationRight;
 
 int STATE = 0;
 int NS = 0;
 
+int STATE2 = 0;
+int NS2 = 0;
+
 const int idle = 0;
-const int turnLeft = 1;
-const int goStraight = 2;
-const int turnRight = 3;
+const int left = 1;
+const int straight = 2;
+const int right = 3;
 const int slightRight = 4;
+const int slightLeft = 5;
 
 char data = 0;
 
@@ -39,10 +47,11 @@ void setup() {
 
   pinMode(echoPinLeft, INPUT);
   pinMode(echoPinFront, INPUT);
+  pinMode(echoPinRight, INPUT);
 
   pinMode(trigPinLeft, OUTPUT);
   pinMode(trigPinFront, OUTPUT);
-
+  pinMode(trigPinRight, OUTPUT);
 }
 
 void loop() {
@@ -61,11 +70,19 @@ void loop() {
   digitalWrite(trigPinFront, LOW);
 
   durationFront = pulseIn(echoPinFront, HIGH);
-  
-  //left
+
+  digitalWrite(trigPinRight, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPinRight, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPinRight, LOW);
+
+  durationRight = pulseIn(echoPinRight, HIGH);
+
+  //left motor
   digitalWrite(8, LOW);
   digitalWrite(7, HIGH);
-  //right
+  //right motor
   digitalWrite(12, LOW);
   digitalWrite(13, HIGH);
 
@@ -77,9 +94,13 @@ void bluetoothInput() {
   {
     data = Serial.read();
   }
+  else if (data == '2') //right-hand rule
+  {
+    rightRule();
+  }
   else if (data == '1') //left-hand rule
   {
-    sensor();
+    leftRule();
   }
   else if (data == '0') //stop
   {
@@ -88,7 +109,7 @@ void bluetoothInput() {
 
 }
 
-void sensor() {
+void leftRule() {
   STATE = NS;
 
   switch (STATE) {
@@ -96,24 +117,24 @@ void sensor() {
       if (durationLeft < 350 && durationFront >= 200)
         NS = slightRight;
       else if (durationLeft < 625 && durationFront >= 200)
-        NS = goStraight;
+        NS = straight;
       else if (durationLeft < 625 && durationFront < 200)
-        NS = turnRight;
+        NS = right;
       else if (durationLeft >= 625 || durationFront < 200)
-        NS = turnLeft;
+        NS = left;
       else
         NS = idle;
       break;
 
-    case turnLeft:
+    case left:
       NS = idle;
       break;
 
-    case goStraight:
+    case straight:
       NS = idle;
       break;
 
-    case turnRight:
+    case right:
       NS = idle;
       break;
 
@@ -130,29 +151,81 @@ void sensor() {
     case idle:
       break;
 
-    case turnLeft:
-      analogWrite(9, 65);
-      analogWrite(11, 255);
+    case left:
+      turnSlightLeft();
       break;
 
-    case goStraight:
-      analogWrite(9, 255);
-      analogWrite(11, 255);
+    case straight:
+      goStraight();
       break;
 
-    case turnRight:
-      //RIGHT
-      digitalWrite(12, HIGH);
-      digitalWrite(13, LOW);
-      analogWrite(9, 255);
-      analogWrite(11, 255);
-
-      delay(1100);
+    case right:
+      turnSharpRight();
       break;
 
     case slightRight:
-      analogWrite(9, 255);  //9 is left
-      analogWrite(11, 65); //11 is right
+      turnSlightRight();
+      break;
+
+  }
+}
+
+void rightRule() {
+  STATE2 = NS2;
+
+  switch (STATE2) {
+    case idle:
+      if (durationRight < 350 && durationFront >= 200)
+        NS2 = slightLeft;
+      else if (durationRight < 625 && durationFront >= 200)
+        NS2 = straight;
+      else if (durationRight < 625 && durationFront < 200)
+        NS2 = left;
+      else if (durationRight >= 625 || durationFront < 200)
+        NS2 = right;
+      else
+        NS2 = idle;
+      break;
+
+    case left:
+      NS2 = idle;
+      break;
+
+    case straight:
+      NS2 = idle;
+      break;
+
+    case right:
+      NS2 = idle;
+      break;
+
+    case slightLeft:
+      NS2 = idle;
+      break;
+
+  }
+
+  STATE2 = NS2;
+
+  switch (STATE2) {
+
+    case idle:
+      break;
+
+    case left:
+      turnSharpLeft();
+      break;
+
+    case straight:
+      goStraight();
+      break;
+
+    case right:
+      turnSlightRight();
+      break;
+
+    case slightLeft:
+      turnSlightLeft();
       break;
 
   }
@@ -163,3 +236,37 @@ void pause() {
   digitalWrite(11, 0 );
 }
 
+void turnSlightLeft() {
+  analogWrite(9, 65);
+  analogWrite(11, 255);
+}
+
+void goStraight() {
+  analogWrite(9, 255);
+  analogWrite(11, 255);
+}
+
+void turnSharpRight() {
+  //RIGHT
+  digitalWrite(12, HIGH);
+  digitalWrite(13, LOW);
+  analogWrite(9, 255);
+  analogWrite(11, 255);
+
+  delay(1100);
+}
+
+void turnSlightRight() {
+  analogWrite(9, 255);  //9 is left
+  analogWrite(11, 65); //11 is right
+}
+
+void turnSharpLeft() {
+  //RIGHT
+  digitalWrite(8, HIGH);
+  digitalWrite(7, LOW);
+  analogWrite(9, 255);
+  analogWrite(11, 255);
+
+  delay(1000);
+}

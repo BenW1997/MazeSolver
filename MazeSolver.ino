@@ -13,6 +13,16 @@ const int echoPinFront = 4;
 long durationLeft;
 long durationFront;
 
+int STATE = 0;
+int NS = 0;
+const int idle = 0;
+const int turnLeft = 1;
+const int goStraight = 2;
+const int turnRight = 3;
+const int slightRight = 4;
+
+char data = 0;
+
 void setup()
 {
 
@@ -52,9 +62,9 @@ void loop()
   delayMicroseconds(10);
   digitalWrite(trigPinFront, LOW);
 
-
   durationFront = pulseIn(echoPinFront, HIGH);
 
+<<<<<<< HEAD
   sensor();
   Serial.print("Left: ");
   Serial.println(durationLeft);
@@ -71,17 +81,32 @@ void sensor()
   digitalWrite(8, LOW);
   digitalWrite(7, HIGH);
   analogWrite(9, 1 );//50
+=======
+  //LEFT
+  digitalWrite(8, LOW);
+  digitalWrite(7, HIGH);
+>>>>>>> origin/master
 
   //RIGHT
   digitalWrite(12, LOW);
   digitalWrite(13, HIGH);
+<<<<<<< HEAD
   analogWrite(11, 1);//0
   */
   
   if (durationFront > 650) //IF NO WALL IN FRONT
+=======
+
+  if (Serial.available())
+>>>>>>> origin/master
   {
-    if (durationLeft < 300) //TURN SLIGHT RIGHT IF TOO CLOSE
+    data = Serial.read();
+    Serial.print(data);
+    Serial.print("Serial available");
+  }
+  /*  if (data == '2') //right-hand rule
     {
+<<<<<<< HEAD
       //LEFT
       digitalWrite(8, LOW);
       digitalWrite(7, HIGH);
@@ -116,11 +141,69 @@ void sensor()
       digitalWrite(12, LOW);
       digitalWrite(13, HIGH);
       analogWrite(11, 200);//60
-
-    }
-  }
-  else //IS FRONT WALL
+=======
+      sensor2();
+    } */
+ // Serial.println("in first else");
+  else if (data == '0') //left-hand rule
   {
+    pause();
+    Serial.println("pause");
+  }
+  else if (data == '1') //stop
+  {
+    sensor();
+    Serial.println("sensor");
+  }
+  else
+  {
+    sensor();
+    Serial.println("else pause");
+  }
+
+}
+
+void sensor()
+{
+  STATE = NS;
+
+  switch (STATE)
+  {
+    case idle:
+      if (durationLeft < 350 && durationFront > 200)
+        NS = slightRight;
+      else if (durationLeft < 625 && durationFront > 200)
+        NS = goStraight;
+      else if (durationLeft < 625 && durationFront < 200)
+        NS = turnRight;
+      else if (durationLeft >= 625 || durationFront < 200)
+        NS = turnLeft;
+      else
+        NS = idle;
+      break;
+
+    case turnLeft:
+      NS = idle;
+      break;
+
+    case goStraight:
+      NS = idle;
+      break;
+
+    case turnRight:
+      NS = idle;
+      break;
+
+    case slightRight:
+      NS = idle;
+      break;
+>>>>>>> origin/master
+
+  }
+  STATE = NS;
+  switch (STATE)
+  {
+<<<<<<< HEAD
     if (durationLeft > 750) //IF NO LEFT WALL
     {
       //LEFT Wheel
@@ -146,6 +229,47 @@ void sensor()
       digitalWrite(13, LOW);
       analogWrite(11, 0);//0
     }
+=======
+    case idle:
+      break;
+
+    case turnLeft:
+      analogWrite(9, 65);
+      analogWrite(11, 255);
+      break;
+
+    case goStraight:
+      analogWrite(9, 255);
+      analogWrite(11, 255);
+      break;
+
+    case turnRight:
+      //RIGHT
+      digitalWrite(12, HIGH);
+      digitalWrite(13, LOW);
+      analogWrite(9, 255);//90
+      analogWrite(11, 255);//0
+
+      delay(1400);
+      break;
+
+    case slightRight:
+      analogWrite(9, 255);  //9 is left
+      analogWrite(11, 75); //11 is right
+      break;
+
+>>>>>>> origin/master
   }
+}
+
+void sensor2()
+{
+
+}
+
+void pause()
+{
+  digitalWrite(9, 0 );
+  digitalWrite(11, 0 );
 }
 

@@ -15,6 +15,7 @@ long durationFront;
 
 int STATE = 0;
 int NS = 0;
+
 const int idle = 0;
 const int turnLeft = 1;
 const int goStraight = 2;
@@ -23,9 +24,7 @@ const int slightRight = 4;
 
 char data = 0;
 
-void setup()
-{
-
+void setup() {
   Serial.begin(9600);
 
   //LEFT
@@ -46,8 +45,7 @@ void setup()
 
 }
 
-void loop()
-{
+void loop() {
   digitalWrite(trigPinLeft, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPinLeft, HIGH);
@@ -63,112 +61,37 @@ void loop()
   digitalWrite(trigPinFront, LOW);
 
   durationFront = pulseIn(echoPinFront, HIGH);
-
-<<<<<<< HEAD
-  sensor();
-  Serial.print("Left: ");
-  Serial.println(durationLeft);
-  Serial.print("Front: ");
-  Serial.println(durationFront);
-
-  delay(500);
-}
-
-void sensor()
-{
-  /*
-  //LEFT
+  
+  //left
   digitalWrite(8, LOW);
   digitalWrite(7, HIGH);
-  analogWrite(9, 1 );//50
-=======
-  //LEFT
-  digitalWrite(8, LOW);
-  digitalWrite(7, HIGH);
->>>>>>> origin/master
-
-  //RIGHT
+  //right
   digitalWrite(12, LOW);
   digitalWrite(13, HIGH);
-<<<<<<< HEAD
-  analogWrite(11, 1);//0
-  */
-  
-  if (durationFront > 650) //IF NO WALL IN FRONT
-=======
 
+  bluetoothInput();
+}
+
+void bluetoothInput() {
   if (Serial.available())
->>>>>>> origin/master
   {
     data = Serial.read();
- //   Serial.print(data);
- //   Serial.print("Serial available");
   }
-  /*  if (data == '2') //right-hand rule
-    {
-<<<<<<< HEAD
-      //LEFT
-      digitalWrite(8, LOW);
-      digitalWrite(7, HIGH);
-      analogWrite(9, 233);//50
-
-      //RIGHT
-      digitalWrite(12, LOW);
-      digitalWrite(13, HIGH);
-      analogWrite(11, 150);//0
-    }
-    else if (durationLeft < 650) //GO STRAIGHT
-    {
-      //LEFT
-      digitalWrite(8, LOW);
-      digitalWrite(7, HIGH);
-      analogWrite(9, 233);
-      
-
-      //RIGHT
-      digitalWrite(12, LOW);
-      digitalWrite(13, HIGH);
-      analogWrite(11, 200);//60
-    }
-    else //if (durationLeft < 750) //TURN SLIGHT LEFT IF TOO FAR
-    {
-      //LEFT Wheel
-      digitalWrite(8, LOW);
-      digitalWrite(7, HIGH);
-      analogWrite(9, 175);//90
-
-      //RIGHT Wheel
-      digitalWrite(12, LOW);
-      digitalWrite(13, HIGH);
-      analogWrite(11, 200);//60
-=======
-      sensor2();
-    } */
-  // Serial.println("in first else");
   else if (data == '1') //left-hand rule
   {
     sensor();
- //   Serial.println("sensor");
   }
   else if (data == '0') //stop
   {
     pause();
- //   Serial.println("pause");
   }
-  //else
-  //{
-    //pause();
- //   Serial.println("else pause");
-  //}
 
 }
 
-void sensor()
-{
+void sensor() {
   STATE = NS;
 
-  switch (STATE)
-  {
+  switch (STATE) {
     case idle:
       if (durationLeft < 350 && durationFront >= 200)
         NS = slightRight;
@@ -197,39 +120,13 @@ void sensor()
     case slightRight:
       NS = idle;
       break;
->>>>>>> origin/master
 
   }
+
   STATE = NS;
-  switch (STATE)
-  {
-<<<<<<< HEAD
-    if (durationLeft > 750) //IF NO LEFT WALL
-    {
-      //LEFT Wheel
-      digitalWrite(8, LOW);
-      digitalWrite(7, LOW);
-      analogWrite(9, 1);//90
 
-      //RIGHT Wheel
-      digitalWrite(12, LOW);
-      digitalWrite(13, HIGH);
-      analogWrite(11, 1);//60
-    }
-    else
-    {
-      //TURN RIGHT
-      //LEFT Wheel
-      digitalWrite(8, LOW);
-      digitalWrite(7, HIGH);
-      analogWrite(9, 1);//90
+  switch (STATE) {
 
-      //RIGHT Wheel
-      digitalWrite(12, LOW);
-      digitalWrite(13, LOW);
-      analogWrite(11, 0);//0
-    }
-=======
     case idle:
       break;
 
@@ -247,28 +144,21 @@ void sensor()
       //RIGHT
       digitalWrite(12, HIGH);
       digitalWrite(13, LOW);
-      analogWrite(9, 255);//90
-      analogWrite(11, 255);//0
+      analogWrite(9, 255);
+      analogWrite(11, 255);
 
-      delay(1400);
+      delay(1100);
       break;
 
     case slightRight:
       analogWrite(9, 255);  //9 is left
-      analogWrite(11, 75); //11 is right
+      analogWrite(11, 65); //11 is right
       break;
 
->>>>>>> origin/master
   }
 }
-/*
-void sensor2()
-{
 
-}
-*/
-void pause()
-{
+void pause() {
   digitalWrite(9, 0 );
   digitalWrite(11, 0 );
 }

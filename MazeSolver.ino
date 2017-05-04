@@ -237,7 +237,7 @@ void pause() {
 }
 
 void turnSlightLeft() {
-  analogWrite(9, 65);
+  analogWrite(9, 60);
   analogWrite(11, 255);
 }
 
@@ -258,7 +258,7 @@ void turnSharpRight() {
 
 void turnSlightRight() {
   analogWrite(9, 255);  //9 is left
-  analogWrite(11, 65); //11 is right
+  analogWrite(11, 55); //11 is right
 }
 
 void turnSharpLeft() {

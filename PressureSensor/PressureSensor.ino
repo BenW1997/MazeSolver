@@ -21,7 +21,7 @@ void loop(void)
   fsrReadingFinish = analogRead(fsrAnalogPin1);
   Serial.println(done);
 
-  if (fsrReadingStart >= 200 && fsrReadingFinish < 200)
+  if (fsrReadingStart >= 200 && fsrReadingFinish < 25)
   {
     counter = 0;
     lcd.clear();
@@ -32,7 +32,7 @@ void loop(void)
     done = 0;
     delay(1000);
   }
-  else if (fsrReadingStart < 200 && fsrReadingFinish < 100)
+  else if (fsrReadingStart < 200 && fsrReadingFinish < 25)
   {
     if (done == 1)
     {
@@ -54,7 +54,7 @@ void loop(void)
       delay(1000);
     }
   }
-  else if (fsrReadingStart < 200 && fsrReadingFinish >= 100)
+  else if (fsrReadingStart < 200 && fsrReadingFinish >= 25)
   {
     lcd.clear();
     lcd.print("Finish time:");
